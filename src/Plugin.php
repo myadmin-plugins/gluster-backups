@@ -12,7 +12,7 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 class Plugin {
 
 	public static $name = 'Gluster Plugin';
-	public static $description = 'Allows handling of Gluster emails and honeypots';
+	public static $description = 'Allows handling of Gluster based Backups';
 	public static $help = '';
 	public static $type = 'plugin';
 
