@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/myadmin-gluster-backups.iml" filepath="$PROJECT_DIR$/.idea/myadmin-gluster-backups.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/gluster-backups.iml" filepath="$PROJECT_DIR$/.idea/gluster-backups.iml" />
     </modules>
   </component>
 </project>

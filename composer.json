@@ -1,5 +1,5 @@
 {
-	"name": "detain/myadmin-gluster-backups",
+	"name": "detain/gluster-backups",
 	"type": "myadmin-plugin",
 	"description": "Gluster handling plugin for MyAdmin",
 	"keywords": [

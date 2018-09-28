@@ -54,10 +54,10 @@ class Plugin
 	public static function getRequirements(GenericEvent $event)
 	{
 		$loader = $event->getSubject();
-		$loader->add_requirement('class.Gluster', '/../vendor/detain/myadmin-gluster-backups/src/Gluster.php');
-		$loader->add_requirement('deactivate_kcare', '/../vendor/detain/myadmin-gluster-backups/src/abuse.inc.php');
-		$loader->add_requirement('deactivate_abuse', '/../vendor/detain/myadmin-gluster-backups/src/abuse.inc.php');
-		$loader->add_requirement('get_abuse_licenses', '/../vendor/detain/myadmin-gluster-backups/src/abuse.inc.php');
+		$loader->add_requirement('class.Gluster', '/../vendor/detain/gluster-backups/src/Gluster.php');
+		$loader->add_requirement('deactivate_kcare', '/../vendor/detain/gluster-backups/src/abuse.inc.php');
+		$loader->add_requirement('deactivate_abuse', '/../vendor/detain/gluster-backups/src/abuse.inc.php');
+		$loader->add_requirement('get_abuse_licenses', '/../vendor/detain/gluster-backups/src/abuse.inc.php');
 	}
 
 	/**
