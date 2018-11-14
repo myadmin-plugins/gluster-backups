@@ -42,9 +42,8 @@ class Plugin
 		$menu = $event->getSubject();
 		if ($GLOBALS['tf']->ima == 'admin') {
 			function_requirements('has_acl');
-			if (has_acl('client_billing')) {
-				$menu->add_link('admin', 'choice=none.abuse_admin', '/lib/webhostinghub-glyphs-icons/icons/development-16/Black/icon-spam.png', __('Gluster'));
-			}
+            if (has_acl('client_billing')) {
+            }
 		}
 	}
 
@@ -72,7 +71,5 @@ class Plugin
          * @var \MyAdmin\Settings $settings
          **/
         $settings = $event->getSubject();
-		$settings->add_text_setting(__('General'), __('Gluster'), 'abuse_imap_user', __('Gluster IMAP User'), __('Gluster IMAP Username'), ABUSE_IMAP_USER);
-		$settings->add_text_setting(__('General'), __('Gluster'), 'abuse_imap_pass', __('Gluster IMAP Pass'), __('Gluster IMAP Password'), ABUSE_IMAP_PASS);
 	}
 }
