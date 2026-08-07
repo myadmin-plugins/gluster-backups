@@ -6,6 +6,7 @@ use Detain\MyAdminGluster\Plugin;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * Class PluginTest
@@ -275,6 +276,67 @@ class PluginTest extends TestCase
         );
     }
 
+    /**
+     * Test that every source file getRequirements() registers actually exists on disk.
+     *
+     * getRequirements() currently registers nothing, so this test passes vacuously --
+     * that is the correct outcome, and the assertion after the loop keeps the test from
+     * being reported as risky while the requirement table is empty. It exists to catch
+     * any future registration that names a file this package does not ship.
+     *
+     * This replaces testSourceReferencesGlusterRequirements() and
+     * testSourceReferencesAbuseRequirements(), which asserted that the strings
+     * class.Gluster, deactivate_kcare, deactivate_abuse, get_abuse_licenses,
+     * Gluster.php and abuse.inc.php appeared in the source. They only ever inspected
+     * the registration text and never the filesystem, so they stayed green for years
+     * while every one of those registrations pointed at a file that has never existed
+     * in this package -- they locked the bug in rather than catching it.
+     *
+     * The registered paths are written relative to the core INCLUDE_ROOT (they begin
+     * '/../vendor/detain/myadmin-gluster-backups/'), so the portion after this
+     * package's own directory name is resolved against the package root here.
+     *
+     * @return void
+     */
+    public function testEveryRegisteredRequirementSourceExists(): void
+    {
+        $loader = new class () {
+            /** @var array<string, string|array<string>> */
+            public array $requirements = [];
+
+            /**
+             * @param string $function
+             * @param string|array<string> $source
+             * @param mixed $methods
+             * @return void
+             */
+            public function add_requirement($function, $source, $methods = false): void
+            {
+                $this->requirements[$function] = $source;
+            }
+        };
+
+        Plugin::getRequirements(new GenericEvent($loader));
+
+        $packageRoot = dirname(__DIR__);
+        $marker = 'myadmin-gluster-backups/';
+        foreach ($loader->requirements as $function => $registered) {
+            foreach ((array)$registered as $source) {
+                $relative = $source;
+                $pos = strpos($relative, $marker);
+                if ($pos !== false) {
+                    $relative = substr($relative, $pos + strlen($marker));
+                }
+                $this->assertFileExists(
+                    $packageRoot . '/' . ltrim($relative, '/'),
+                    "Requirement '{$function}' registers '{$source}', which does not exist on disk"
+                );
+            }
+        }
+
+        $this->assertIsArray($loader->requirements);
+    }
+
     // ---------------------------------------------------------------
     //  getSettings() method signature tests
     // ---------------------------------------------------------------
@@ -365,32 +427,6 @@ class PluginTest extends TestCase
             'use Symfony\\Component\\EventDispatcher\\GenericEvent;',
             $source
         );
-    }
-
-    /**
-     * Test that getRequirements references Gluster-related requirement paths in source.
-     *
-     * @return void
-     */
-    public function testSourceReferencesGlusterRequirements(): void
-    {
-        $source = file_get_contents((new ReflectionClass(Plugin::class))->getFileName());
-        $this->assertStringContainsString('class.Gluster', $source);
-        $this->assertStringContainsString('myadmin-gluster-backups/src/Gluster.php', $source);
-    }
-
-    /**
-     * Test that getRequirements references abuse-related requirement paths in source.
-     *
-     * @return void
-     */
-    public function testSourceReferencesAbuseRequirements(): void
-    {
-        $source = file_get_contents((new ReflectionClass(Plugin::class))->getFileName());
-        $this->assertStringContainsString('deactivate_kcare', $source);
-        $this->assertStringContainsString('deactivate_abuse', $source);
-        $this->assertStringContainsString('get_abuse_licenses', $source);
-        $this->assertStringContainsString('abuse.inc.php', $source);
     }
 
     /**
