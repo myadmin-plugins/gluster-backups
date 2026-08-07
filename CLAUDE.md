@@ -46,7 +46,15 @@ if ($GLOBALS['tf']->ima == 'admin') {
 - Use `ReflectionClass` for structural assertions (namespace, static props, method signatures)
 - Verify parameter types via `$param->getType()->getName()` against `Symfony\Component\EventDispatcher\GenericEvent`
 - Test source file content: `file_get_contents((new ReflectionClass(Plugin::class))->getFileName())`
-- Assert `assertStringContainsString()` for key strings like `class.Gluster`, `abuse.inc.php`, `has_acl`
+- **Do not assert that `getRequirements()` registers a particular name or path.** Two tests
+  used to do that — `testSourceReferencesGlusterRequirements` and
+  `testSourceReferencesAbuseRequirements`, matching on `class.Gluster` and `abuse.inc.php` —
+  and they were green for years against registrations pointing at `src/Gluster.php` and
+  `src/abuse.inc.php`, neither of which has ever existed in this package. They asserted the
+  registration table and never the filesystem, so they were a lock on the bug rather than
+  coverage of it. Both were deleted with the registrations. Assert the property that would
+  have caught it instead: every source `getRequirements()` registers resolves to a file that
+  exists, which is what `testEveryRegisteredRequirementSourceExists` now does.
 
 Run the full test suite:
 ```bash
