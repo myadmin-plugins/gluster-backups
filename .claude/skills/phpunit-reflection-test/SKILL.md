@@ -1,6 +1,6 @@
 ---
 name: phpunit-reflection-test
-description: Writes structural PHPUnit tests in `tests/PluginTest.php` using `ReflectionClass` to assert class shape, static properties, method signatures, and parameter types. Also generates source-content assertions via `file_get_contents()`. Use when user says 'add test', 'test the plugin', 'write PHPUnit for Plugin', or adds a method to `src/Plugin.php`. Do NOT use for behavioral/integration tests or mocking event dispatch. NOTE: for a plugin's contract/behavioral tests (tests/ContractTest.php, the shared harness, composer myadmin:scaffold-tests) use the plugin-contract-tests skill instead — this skill's reflection-only guidance predates that harness.
+description: Writes structural PHPUnit tests in `tests/PluginTest.php` using `ReflectionClass` to assert class shape, static properties, method signatures, and parameter types. Also generates source-content assertions via `file_get_contents()`. Use when user says 'add test', 'test the plugin', 'write PHPUnit for Plugin', or adds a method to `src/Plugin.php`. Do NOT use for behavioral/integration tests or mocking event dispatch. For a plugin's contract or behavioral tests (tests/ContractTest.php, the shared harness, composer myadmin:scaffold-tests) use the plugin-contract-tests skill instead — this skill's reflection-only guidance predates that harness.
 ---
 <!-- myadmin-contract-harness-notice -->
 > ### ⚠️ Read this before the rest of the file
